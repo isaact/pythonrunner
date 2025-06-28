@@ -64,7 +64,7 @@ COPY app.py nsjail.cfg requirements.txt ./
 # Create sandbox path (tmpfs will override it at runtime)
 RUN mkdir -p ${SANDBOX_PATH}
 # Change ownership of the app, runner, and sandbox directories
-RUN mkdir -p /sandbox && chown -R app:app /app /runner ${SANDBOX_PATH} /sandbox
+RUN chown -R app:app /app /runner ${SANDBOX_PATH}
 
 # Switch to the non-root user
 USER app

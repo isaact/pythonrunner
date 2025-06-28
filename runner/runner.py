@@ -9,7 +9,7 @@ def run_user_script(module_name):
     captures its stdout, executes its main() function, and prints a
     final JSON object containing the result and the captured stdout.
     """
-    module_path = f"/sandbox/{module_name}.py"
+    module_path = f"/tmp/sandbox/{module_name}.py"
 
     # Redirect stdout to a string buffer
     old_stdout = sys.stdout

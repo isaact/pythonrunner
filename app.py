@@ -21,29 +21,29 @@ def execute_script():
     if "def main" not in script:
         return jsonify({"error": "Script must contain a 'main' function"}), 400
 
+    # Save script to the host's sandbox directory
+    os.makedirs(SANDBOX_PATH, exist_ok=True)
     script_uuid = uuid.uuid4().hex
-    script_filename_in_sandbox = f"/sandbox/{script_uuid}.py"
+    script_filename = os.path.join(SANDBOX_PATH, f"{script_uuid}.py")
 
-    # The user's script is not written to the host filesystem.
-    # Instead, it's piped into the jail's stdin and written to the tmpfs.
-    commands_to_pipe = f"""
-cat <<'EOF' > {script_filename_in_sandbox}
-{script}
-EOF
-/usr/local/bin/python /runner/runner.py {script_uuid}
-"""
+    with open(script_filename, "w") as f:
+        f.write(script)
 
+    # The runner script is executed by nsjail.
+    # Since namespaces are disabled, it runs in the host's filesystem context.
     nsjail_cmd = [
         "nsjail",
         "-C", NSJAIL_CONFIG,
+        "-q",
         "--",
-        "/bin/sh",
+        "/usr/local/bin/python",
+        "/runner/runner.py",
+        script_uuid  # Pass the module name to the runner
     ]
 
     try:
         proc = subprocess.run(
             nsjail_cmd,
-            input=commands_to_pipe,
             capture_output=True,
             text=True,
             timeout=5,

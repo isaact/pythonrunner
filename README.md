@@ -6,8 +6,6 @@ This service executes arbitrary Python code within a secure, sandboxed environme
 
 ### 1. Build the Docker Image
 
-To avoid creating anonymous images, build the image with a specific tag. This command only needs to be run once, or whenever you make changes to the source code.
-
 ```bash
 docker build -t python-code-executor .
 ```
@@ -24,24 +22,11 @@ The service will now be running and accessible at `http://localhost:8080`.
 
 ## Running Tests
 
-The project includes a full suite of unit tests. To run them, first build the main image and start the container:
+The project includes a full suite of integration tests. The following command provides a convenient way to build the latest version of the code, run the tests, and automatically clean up the test container.
 
 ```bash
-docker build -t python-code-executor .
-docker run -d --name python-executor-container -p 8080:8080 python-code-executor
-```
-
-Once the container is running, you can execute the tests inside it:
-
-```bash
-docker exec python-executor-container pytest -v
-```
-
-When you are finished, you can stop and remove the container:
-
-```bash
-docker stop python-executor-container
-docker rm python-executor-container
+docker build -t python-code-executor . && \
+docker run --rm python-code-executor pytest -v
 ```
 
 ## Usage

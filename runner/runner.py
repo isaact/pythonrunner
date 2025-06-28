@@ -56,5 +56,6 @@ if __name__ == "__main__":
         run_user_script(module_to_run)
     except Exception as e:
         # Catch any error during import or execution and report it
-        print(json.dumps({"error": "Failed to execute script", "details": str(e)}), file=sys.stderr)
+        error_details = f"{type(e).__name__}: {e}"
+        print(json.dumps({"error": "Failed to execute script", "details": error_details}), file=sys.stderr)
         sys.exit(1)

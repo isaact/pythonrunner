@@ -59,7 +59,7 @@ COPY --from=builder /nsjail/nsjail /usr/local/bin/nsjail
 
 # Copy runner and app code separately
 COPY runner/ /runner/
-COPY app.py nsjail.cfg requirements.txt ./
+COPY app.py nsjail.cfg requirements.txt test_app.py ./
 
 # Create sandbox path (tmpfs will override it at runtime)
 RUN mkdir -p ${SANDBOX_PATH}
@@ -75,3 +75,4 @@ EXPOSE ${FLASK_RUN_PORT}
 
 # Entrypoint runs Flask app
 CMD ["python", "app.py"]
+

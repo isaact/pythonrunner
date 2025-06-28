@@ -2,18 +2,29 @@ import os
 import uuid
 import subprocess
 import json
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
 FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 8080))
 SANDBOX_PATH = os.getenv("SANDBOX_PATH", "/tmp/sandbox")
 NSJAIL_CONFIG = os.getenv("NSJAIL_CONFIG", "/app/nsjail.cfg")
+@app.route("/", methods=["GET"])
+def index():
+    """
+    Renders the homepage.
+    """
+    return render_template("index.html")
+
 
 @app.route("/execute", methods=["POST"])
 def execute_script():
-    data = request.get_json(force=True)
-    script = data.get("script")
+    if request.is_json:
+        data = request.get_json()
+        script = data.get("script")
+    else:
+        script = request.form.get("script")
+
     if not script:
         return jsonify({"error": "Missing 'script' in request body"}), 400
 

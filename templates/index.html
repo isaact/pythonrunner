@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Execution Service</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #00599C;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        code {
+            background: #eee;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        pre {
+            background: #1E2127;
+            color: #9ba2b2;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            padding: 0.5rem;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+        button {
+            background-color: #00599C;
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #004080;
+        }
+        #result-container {
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Python Code Execution Service</h1>
+        <p>
+            Paste your Python code below and click "Execute". The script must contain a <code>main()</code> function.
+            The environment has <code>pandas</code> and <code>numpy</code> pre-installed.
+        </p>
+        
+        <form id="code-form">
+            <textarea name="script" id="script-input">import pandas as pd
+
+def main():
+    print("Hello from stdout!")
+    # Create a simple DataFrame
+    data = {'col1': [1, 2], 'col2': [3, 4]}
+    df = pd.DataFrame(data=data)
+    return df.to_dict()
+</textarea>
+            <button type="submit">Execute</button>
+        </form>
+
+        <div id="result-container">
+            <h2>Result</h2>
+            <pre id="result-output">The output will be displayed here.</pre>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('code-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const scriptContent = document.getElementById('script-input').value;
+            const resultOutput = document.getElementById('result-output');
+            const submitButton = this.querySelector('button');
+
+            resultOutput.textContent = 'Executing...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('/execute', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ script: scriptContent })
+                });
+                
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultOutput.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    resultOutput.textContent = 'Error: ' + JSON.stringify(data, null, 2);
+                }
+            } catch (error) {
+                resultOutput.textContent = 'An unexpected error occurred: ' + error.message;
+            } finally {
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

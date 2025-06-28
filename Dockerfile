@@ -60,6 +60,7 @@ COPY --from=builder /nsjail/nsjail /usr/local/bin/nsjail
 # Copy runner and app code separately
 COPY runner/ /runner/
 COPY app.py nsjail.cfg requirements.txt test_app.py ./
+COPY templates/ /app/templates/
 
 # Create sandbox path (tmpfs will override it at runtime)
 RUN mkdir -p ${SANDBOX_PATH}

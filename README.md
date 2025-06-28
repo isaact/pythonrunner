@@ -43,7 +43,10 @@ curl -X POST http://localhost:8080/execute \
 
 ### Example `cURL` Request (Cloud Run)
 
-Once deployed, you can use the same command with your Google Cloud Run service URL.
+App has been deployed to this url:
+- https://pythonrunner-252963698328.europe-west1.run.app
+
+Use the command below to test it
 
 ```bash
 curl -X POST https://pythonrunner-252963698328.europe-west1.run.app/execute \

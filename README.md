@@ -46,6 +46,6 @@ curl -X POST http://localhost:8080/execute \
 Once deployed, you can use the same command with your Google Cloud Run service URL.
 
 ```bash
-curl -X POST YOUR_CLOUD_RUN_SERVICE_URL/execute \
+curl -X POST https://pythonrunner-252963698328.europe-west1.run.app/execute \
   -H "Content-Type: application/json" \
   -d '{"script":"import pandas as pd\n\ndef main():\n  print(\"Hello from stdout!\")\n  df = pd.DataFrame([{\"a\": 1, \"b\": 2}])\n  return {\"result\": df.to_dict()}"}'

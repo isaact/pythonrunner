@@ -34,7 +34,8 @@ def execute_script():
     nsjail_cmd = [
         "nsjail",
         "-C", NSJAIL_CONFIG,
-        "-q",
+        "--really_quiet",
+        "--disable_rlimits",
         "--",
         "/usr/local/bin/python",
         "/runner/runner.py",

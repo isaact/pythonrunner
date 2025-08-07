@@ -40,15 +40,3 @@ curl -X POST http://localhost:8080/execute \
   -H "Content-Type: application/json" \
   -d '{"script":"import pandas as pd\n\ndef main():\n  print(\"Hello from stdout!\")\n  df = pd.DataFrame([{\"a\": 1, \"b\": 2}])\n  return {\"result\": df.to_dict()}"}'
 ```
-
-### Example `cURL` Request (Cloud Run)
-
-App has been deployed to this url:
-- https://pythonrunner-252963698328.europe-west1.run.app
-
-Use the command below to test it
-
-```bash
-curl -X POST https://pythonrunner-252963698328.europe-west1.run.app/execute \
-  -H "Content-Type: application/json" \
-  -d '{"script":"import pandas as pd\n\ndef main():\n  print(\"Hello from stdout!\")\n  df = pd.DataFrame([{\"a\": 1, \"b\": 2}])\n  return {\"result\": df.to_dict()}"}'
